@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGLY - Human Verification</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('background3.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .verification-form {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .input-group input[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .input-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Human Verification</h1>
+        <div class="verification-form">
+            <h2 class="subtitle">Verify Your Humanity</h2>
+            <p>Please solve the following math problem to verify that you are human.</p>
+            <form id="verificationForm" action="#">
+                <div class="input-group">
+                    <label for="question" id="questionLabel"></label><br>
+                    <input type="text" id="answer" name="answer" required>
+                </div>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var firstNumber = Math.floor(Math.random() * 10) + 1;
+        var secondNumber = Math.floor(Math.random() * 10) + 1;
+        var answer = firstNumber + secondNumber;
+        document.getElementById("questionLabel").innerText = "What is " + firstNumber + " + " + secondNumber + "?";
+
+        document.getElementById("verificationForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var userAnswer = parseInt(document.getElementById("answer").value);
+            
+            if (userAnswer === answer) {
+                // Jika jawaban benar, redirect ke halaman dashboard
+                window.location.href = "dashboard.html";
+            } else {
+                // Jika jawaban salah, beri peringatan
+                alert("Wrong answer. Please try again!");
+                // Refresh pertanyaan
+                firstNumber = Math.floor(Math.random() * 10) + 1;
+                secondNumber = Math.floor(Math.random() * 10) + 1;
+                answer = firstNumber + secondNumber;
+                document.getElementById("questionLabel").innerText = "What is " + firstNumber + " + " + secondNumber + "?";
+            }
+        });
+    </script>
+</body>
+</html>

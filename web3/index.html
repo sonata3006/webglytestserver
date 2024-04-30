@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGLY - Log In</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">WELCOME TO WebGLY</h1>
+        <div class="login-form">
+            <h2 class="subtitle">Log In</h2>
+            <form id="loginForm" action="#" autocomplete="off">
+                <div class="input-group">
+                    <label for="username">Username:</label><br>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password:</label><br>
+                    <div class="password-field">
+                        <input type="password" id="password" name="password" required>
+                        <span class="toggle-password" onclick="togglePassword()"></span>
+                    </div>
+                </div>
+                <input type="submit" value="Log In">
+            </form>
+            <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById("password");
+            var toggleIcon = document.querySelector(".toggle-password");
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.classList.add("show-password");
+            } else {
+                passwordField.type = "password";
+                toggleIcon.classList.remove("show-password");
+            }
+        }
+
+        // Validasi login
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            // Ambil data pengguna yang sudah terdaftar
+            var existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+            // Cek apakah pengguna adalah developer
+            if (username === atob("ZGV2ZWxvcGVy") && password === atob("ZGV2ZWxvcGVyMzAwNjA2")) {
+                window.location.href = "account_control.html";
+                return;
+            }
+
+            // Cek apakah username dan password cocok dengan yang terdaftar
+            var userData = existingUsers.find(function(user) {
+                return user.username === username && user.password === password;
+            });
+
+            if (userData) {
+                localStorage.setItem("userData", JSON.stringify(userData));
+                window.location.href = "dashboard.html";
+            } else {
+                alert("Invalid username or password. Please try again!");
+            }
+        });
+    </script>
+</body>
+</html>

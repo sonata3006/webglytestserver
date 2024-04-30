@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGLY - Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            color: #fff;
+        }
+
+        .title {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .signup-form {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="email"],
+        .input-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-field input[type="password"] {
+            padding-right: 40px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            transition: color 0.3s;
+            background-image: url('eye.png');
+            background-repeat: no-repeat;
+            background-size: 20px;
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+        }
+
+        .toggle-password.show-password {
+            background-image: url('eye-off.png');
+        }
+
+        .input-group input[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .input-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">WELCOME TO WebGLY</h1>
+        <div class="signup-form">
+            <h2 class="subtitle">Sign Up</h2>
+            <form id="signupForm" action="#" autocomplete="off">
+                <div class="input-group">
+                    <label for="fullname">Full Name:</label><br>
+                    <input type="text" id="fullname" name="fullname" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email:</label><br>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="username">Username:</label><br>
+                    <input type="text" id="username" name="username" required>
+                    <span id="usernameError" class="error-message"></span>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password:</label><br>
+                    <div class="password-field">
+                        <input type="password" id="password" name="password" required>
+                        <span class="toggle-password" onclick="togglePassword()"></span>
+                    </div>
+                </div>
+                <input type="submit" value="Sign Up">
+            </form>
+            <p>Already have an account? <a href="index.html">Log in here</a></p>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById("password");
+            var toggleIcon = document.querySelector(".toggle-password");
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.classList.add("show-password");
+                toggleIcon.style.backgroundImage = "url('eye-off.png')";
+            } else {
+                passwordField.type = "password";
+                toggleIcon.classList.remove("show-password");
+                toggleIcon.style.backgroundImage = "url('eye.png')";
+            }
+        }
+
+        // Simpan data pengguna saat signup
+        document.getElementById("signupForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var fullname = document.getElementById("fullname").value;
+            var email = document.getElementById("email").value;
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            // Ambil data pengguna yang sudah terdaftar
+            var existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+            // Cek apakah username sudah digunakan
+            var isExistingUser = existingUsers.some(function(user) {
+                return user.username === username;
+            });
+
+            if (isExistingUser) {
+                document.getElementById("usernameError").innerText = "Username already exists!";
+            } else {
+                // Tambahkan pengguna baru ke daftar pengguna
+                existingUsers.push({
+                    fullname: fullname,
+                    email: email,
+                    username: username,
+                    password: password
+                });
+
+                // Simpan data pengguna ke local storage
+                localStorage.setItem("userData", JSON.stringify({
+                    username: username,
+                    password: password
+                }));
+
+                // Simpan daftar pengguna ke local storage
+                localStorage.setItem("users", JSON.stringify(existingUsers));
+
+                // Redirect ke halaman verifikasi manusia
+                window.location.href = "human_verification.html";
+            }
+        });
+    </script>
+</body>
+</html>

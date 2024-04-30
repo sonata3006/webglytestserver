@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Control</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('background3.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 36px;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .control-form {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .user-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .user-item {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-actions {
+            flex-basis: 150px;
+        }
+
+        .user-actions button {
+            background-color: #f44336;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .user-actions button.change-password-btn {
+            background-color: #4CAF50;
+        }
+
+        .user-actions button:hover {
+            background-color: #d32f2f;
+        }
+
+        .user-actions button.change-password-btn:hover {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Account Control</h1>
+        <div class="control-form">
+            <h2 class="subtitle">Registered Users</h2>
+            <ul class="user-list" id="usersList"></ul>
+        </div>
+    </div>
+
+    <script>
+        var users = JSON.parse(localStorage.getItem("users"));
+
+        var usersList = document.getElementById("usersList");
+        var userListHTML = '';
+        users.forEach(function(user) {
+            userListHTML += '<li class="user-item">' + 
+                                '<div class="user-info">' +
+                                    '<strong>Username:</strong> ' + user.username + '<br>' +
+                                    '<strong>Full Name:</strong> ' + user.fullname + '<br>' +
+                                    '<strong>Email:</strong> ' + user.email + '<br>' +
+                                    '<strong>Password:</strong> ' + user.password + '<br>' +
+                                    '<strong>Registered At:</strong> ' + user.registeredAt +
+                                '</div>' +
+                                '<div class="user-actions">' +
+                                    '<button class="change-password-btn" onclick="changePassword(\'' + user.username + '\')">Change Password</button>' +
+                                    '<button class="delete-btn" onclick="deleteUser(\'' + user.username + '\')">Delete</button>' +
+                                '</div>' +
+                             '</li>';
+        });
+        usersList.innerHTML = userListHTML;
+
+        function deleteUser(username) {
+            var updatedUsers = users.filter(function(user) {
+                return user.username !== username;
+            });
+
+            localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+            // Update the users list
+            users = updatedUsers;
+            var updatedUserListHTML = '';
+            users.forEach(function(user) {
+                updatedUserListHTML += '<li class="user-item">' + 
+                                '<div class="user-info">' +
+                                    '<strong>Username:</strong> ' + user.username + '<br>' +
+                                    '<strong>Full Name:</strong> ' + user.fullname + '<br>' +
+                                    '<strong>Email:</strong> ' + user.email + '<br>' +
+                                    '<strong>Password:</strong> ' + user.password + '<br>' +
+                                    '<strong>Registered At:</strong> ' + user.registeredAt +
+                                '</div>' +
+                                '<div class="user-actions">' +
+                                    '<button class="change-password-btn" onclick="changePassword(\'' + user.username + '\')">Change Password</button>' +
+                                    '<button class="delete-btn" onclick="deleteUser(\'' + user.username + '\')">Delete</button>' +
+                                '</div>' +
+                             '</li>';
+            });
+            usersList.innerHTML = updatedUserListHTML;
+        }
+
+        function changePassword(username) {
+            var newPassword = prompt("Enter new password for " + username + ":");
+            if (newPassword) {
+                var updatedUsers = users.map(function(user) {
+                    if (user.username === username) {
+                        user.password = newPassword;
+                    }
+                    return user;
+                });
+
+                localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+                // Update the users list
+                users = updatedUsers;
+                var updatedUserListHTML = '';
+                users.forEach(function(user) {
+                    updatedUserListHTML += '<li class="user-item">' + 
+                                '<div class="user-info">' +
+                                    '<strong>Username:</strong> ' + user.username + '<br>' +
+                                    '<strong>Full Name:</strong> ' + user.fullname + '<br>' +
+                                    '<strong>Email:</strong> ' + user.email + '<br>' +
+                                    '<strong>Password:</strong> ' + user.password + '<br>' +
+                                    '<strong>Registered At:</strong> ' + user.registeredAt +
+                                '</div>' +
+                                '<div class="user-actions">' +
+                                    '<button class="change-password-btn" onclick="changePassword(\'' + user.username + '\')">Change Password</button>' +
+                                    '<button class="delete-btn" onclick="deleteUser(\'' + user.username + '\')">Delete</button>' +
+                                '</div>' +
+                             '</li>';
+                });
+                usersList.innerHTML = updatedUserListHTML;
+            }
+        }
+    </script>
+</body>
+</html>
